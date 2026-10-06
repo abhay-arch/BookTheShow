@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookmyshow
+  namespace: bookmyshow
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: bookmyshow-role
+  namespace: bookmyshow
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "secrets", "pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: bookmyshow-rolebinding
+  namespace: bookmyshow
+subjects:
+  - kind: ServiceAccount
+    name: bookmyshow
+    namespace: bookmyshow
+roleRef:
+  kind: Role
+  name: bookmyshow-role
+  apiGroup: rbac.authorization.k8s.io
